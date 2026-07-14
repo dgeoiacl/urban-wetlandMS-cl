@@ -947,4 +947,42 @@ Para mantener la legibilidad tanto en modo normal (160px) como expandido (70vh),
 - **Arquitectura:** Sin build step — el `index.html` funciona directamente desde la raíz del repositorio gracias a que todas las dependencias (Tailwind, MapLibre, ECharts, Turf.js, JSZip) se cargan vía CDN.
 - **Datos embebidos:** Los GeoJSON de humedales (107 features) y generadores industriales (9.176 features) están incrustados como variables JS en el HTML, no requieren archivos externos ni servidor.
 - **Control de versiones:** Git + GitHub. Commits con prefijo convencional (`feat:`, `fix:`, `docs:`). Rama `main` como fuente de Pages.
+
+## 13. Responsividad — Adaptación a Móviles (< 1024px)
+
+El layout se adapta a pantallas menores a 1024px usando `flex-col lg:flex-row` en el body y media queries en un bloque `<style>`, sin duplicar DOM.
+
+### 13.1 Bottom Sheet (Panel Lateral)
+
+| Estado | Descripción | CSS |
+|--------|-------------|-----|
+| **Peek** (defecto) | Panel oculto salvo el handle de 44px en la parte inferior | `transform: translateY(calc(100% - 44px))` |
+| **Open** | Panel deslizado hacia arriba (máx 70vh) | `transform: translateY(0)` |
+
+- **Handle:** Barra horizontal dentro del `<aside>` con clase `panel-handle`. Visible solo en móvil (`hidden lg:hidden` → `display:flex` vía media query). Contiene dos líneas decorativas + texto "Panel de Control". Al hacer clic, alterna `mobile-open` en `#side-panel`.
+- **Backdrop:** `<div id="panel-backdrop">` fijo con `background: rgba(0,0,0,0.6)` y `backdrop-filter: blur(2px)`. Aparece con transición de opacidad al abrir el panel. Al hacer clic, cierra el panel.
+- **FAB:** Botón flotante `#panel-fab` (☰) en la esquina inferior izquierda del mapa, visible solo en móvil (`display:none` → `flex` vía media query). También alterna el panel.
+- **Transición:** `transform .35s cubic-bezier(.4,0,.2,1)` — alto rendimiento por usar `transform` y `opacity`, no layout.
+
+### 13.2 Desktop Toggle
+
+En desktop (≥1024px), el botón `#panel-toggle` (◀/▶) en el borde entre panel y main sigue funcionando como antes. En móvil se oculta (`display:none!important`).
+
+### 13.3 Dashboard en Móvil
+
+- Altura reducida a `120px` (`#dashboard-body{height:120px!important}`) para dejar más espacio al mapa.
+- Dashboard expansible funciona igual (3 estados), pero la altura base es menor.
+- El toggle `#dashboard-toggle` y botón ⛶ siguen activos.
+- `map.resize()` se llama al cambiar orientación o alternar cualquier panel.
+
+### 13.4 `map.resize()` Obligatorio
+
+Cada apertura/cierre de panel (desktop o móvil) ejecuta `map.resize()` + `CHART._resize()` después de 350ms para evitar desfases del canvas. También hay un listener global `window.addEventListener('resize', ...)` que ejecuta ambos resize en cada cambio de viewport.
+
+### 13.5 Principios KISS Aplicados
+
+- **0% duplicación de DOM** — el mismo `<aside>` sirve para desktop y móvil
+- **Solo CSS + JS ligero** — 3 media queries, 4 event listeners, 1 función toggle
+- **Sin librerías externas** — bottom sheet nativo con transform CSS
+- **Rendimiento** — `transform` y `opacity` son propiedades que no disparan layout ni paint completos (compositor-only en Chromium y WebKit)
 ```
