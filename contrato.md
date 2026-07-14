@@ -624,7 +624,7 @@ Los resultados se almacenan en la base de datos **`monitor-humedales.geoprocess`
 | Buffer × Humedal + GI | Áreas de Influencia | Humedales | GI | Encuentra GIs cuyo buffer toca un humedal |
 
 - Dropdown estilo cyber-hud (`bg-slate-900/95`, borde `border-cyan-500/40`, sombra neón).
-- Usa `position: fixed` con posicionamiento dinámico vía `getBoundingClientRect()` para no ser recortado por el `overflow-y: auto` del panel de filtros.
+- El HTML del dropdown está al final de `<body>` (fuera de todo contenedor con overflow), con `position: fixed` y `z-index: 9999`. Se posiciona dinámicamente vía `getBoundingClientRect()` justo debajo del botón [i].
 - Se cierra automáticamente al hacer clic fuera.
 - Alcance recomendado: "Solo filtrados".
 
