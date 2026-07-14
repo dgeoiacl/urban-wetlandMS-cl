@@ -17,7 +17,7 @@ Este documento establece los lineamientos técnicos, estéticos y arquitectónic
 - **Comportamiento:** Prohibido el uso de barras de desplazamiento globales (scroll oculto). El panel lateral izquierdo usa scroll continuo único (`overflow-y-scroll scroll-smooth`) que abarca todo el contenido debajo del título (panel de estado + filtros + exportación + buffer + intersección), maximizando el espacio vertical disponible para cada sección. La barra de scroll personalizada mide 6px de ancho, con track semi-transparente (`rgba(15,23,42,0.6)`) y thumb cyan neón semi-transparente (`rgba(34,211,238,0.3)`) que se ilumina al hover (`rgba(34,211,238,0.6)`), manteniendo la estética cyber-hud sin depender de librerías externas.
 - **Responsividad Móvil (max-width: 1023px):**
   - El panel lateral se oculta por defecto y se despliega como overlay con backdrop semitransparente al hacer clic en el FAB (`#panel-fab`), visible solo en móvil.
-  - El dashboard mantiene la barra de control (`#dashboard-toggle`) visible en todos los tamaños de pantalla. El cuerpo del dashboard (`#dashboard-body`) reduce su altura a `120px` (vs `160px` en desktop) para preservar espacio vertical en dispositivos móviles.
+  - El dashboard mantiene la barra de control (`#dashboard-toggle`) visible en todos los tamaños de pantalla. El cuerpo del dashboard (`#dashboard-body`) reduce su altura a `120px` (vs `160px` en desktop) para preservar espacio vertical en dispositivos móviles. `#dashboard-bar` tiene `position:relative;z-index:50` en mobile para quedar sobre el overlay del panel lateral (`z-index:40`).
   - El handle del panel (`.panel-handle`) está oculto en desktop y visible solo en móvil como indicador visual.
 - **Estética General:** Neobrutalismo (tech-brutalism) + cyber-hud / dark mode avanzado. Fondo oscuro profundo (`bg-slate-950`) con tipografía monoespaciada (`font-mono`) en colores claros para mayor contraste técnico.
 - **Estructura Principal:** El diseño se divide en dos secciones principales dentro de un flex container:
@@ -276,6 +276,7 @@ LEGEND.toggleCat(catId)          // expande/colapsa una categoría
 ### 9.7.3 Comportamiento
 
 - **Categorías colapsables:** Cada categoría tiene un header clickeable con chevron ▼/▶. Click expande/colapsa.
+- **Estado inicial:** Todas las categorías comienzan colapsadas (`expanded: false`) para maximizar el espacio del mapa en la carga inicial. El botón global de toggle refleja el estado actual mostrando ▶ (colapsado) o ▼ (expandido).
 - **Toggle global:** Botón en el header "LEYENDA" expande/colapsa todas las categorías.
 - **Auto-ocultación:** Si no hay categorías visibles con items, la leyenda se oculta completamente.
 - **Swatches:**
