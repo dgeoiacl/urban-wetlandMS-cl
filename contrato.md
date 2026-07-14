@@ -502,6 +502,7 @@ Cada operación de intersección se ejecuta dentro de un bloque `try/catch` indi
 ```
 > 54 ENTIDADES INTERSECTADAS (3 errores topológicos) | 2 descartadas por CRS
 ```
+Cuando no hay intersección: `> SIN INTERSECCIÓN DETECTADA. Ver casilla informativa [i] para combinaciones recomendadas.` (sin volcar detalles de depuración; estos van a `console.log`).
 
 ### 11.6 Ejecución Asíncrona — Aislamiento del Hilo Principal
 
@@ -623,6 +624,7 @@ Los resultados se almacenan en la base de datos **`monitor-humedales.geoprocess`
 | Buffer × Humedal + GI | Áreas de Influencia | Humedales | GI | Encuentra GIs cuyo buffer toca un humedal |
 
 - Dropdown estilo cyber-hud (`bg-slate-900/95`, borde `border-cyan-500/40`, sombra neón).
+- Usa `position: fixed` con posicionamiento dinámico vía `getBoundingClientRect()` para no ser recortado por el `overflow-y: auto` del panel de filtros.
 - Se cierra automáticamente al hacer clic fuera.
 - Alcance recomendado: "Solo filtrados".
 
