@@ -1,0 +1,17 @@
+# Datos fuente pesados
+gi-sinader-2024-ckan.xlsx
+gi-sinader-2024.geojson
+Humedales Urbanos.geojson
+Humedales Urbanos - v2.geojson
+
+# Scripts de conversión
+convertir_geojson.py
+*.py
+
+# Archivos del sistema
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
